@@ -1,6 +1,6 @@
 # language chat app
 Reasons for creating this app were threefold:
-1. I wanted to play and create a web app with React and flask
+1. I wanted to play and create a web app with React and Flask
 2. I wanted to try using ChatGPT api
 3. I wanted to display the errors I make while conversing with ChatGPT in Italian in a visual manner (so that I don't have to compare the two texts word by word)
 
@@ -11,6 +11,6 @@ You need to have NodeJS installed. Create a virtual environment (called venv) in
 
 Then cd to the app folder and run  
 `npm run start-backend`  
-to start the Flask backend. After that, tun
+to start the Flask backend. After that, run  
 `npm start`  
-to run React frontend.
+to start React frontend.
