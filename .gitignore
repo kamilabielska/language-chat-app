@@ -25,4 +25,4 @@ yarn-error.log*
 backend/venv
 backend/__pycache__
 backend/config.json
-backend/messages.csv
+backend/chat_history.json

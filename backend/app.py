@@ -14,14 +14,8 @@ api = Flask(__name__)
 @api.route('/save_data', methods=['POST'])
 def save_and_respond():
     data = request.json
-    # f = open('messages.csv', 'a', newline='')
-    # writer = csv.writer(f)
-
-    # writer.writerow(['user', data['message'], time.time()])
     correction, chatbot_message = get_response(data['message'])
     correction, formatting = correct_user_message(data['message'], correction)
-    # writer.writerow(['chatbot', chatbot_message, time.time()])
-    # f.close()
 
     return {
         "message": chatbot_message,
@@ -29,11 +23,13 @@ def save_and_respond():
         "format": formatting
     }
 
+
 @api.route('/set_config', methods=['POST'])
 def save_config():
     with open('config.json', 'w', encoding='utf-8') as f:
         json.dump(request.json, f, ensure_ascii=False, indent=4)
     return {"message": "config saved"}
+    
 
 @api.route('/init_conv', methods=['POST'])
 def init_conversation():
