@@ -27,13 +27,20 @@ function App() {
     axios.post('/set_config', { api_key: apiKey, language: language })
       .then(response => {
           console.log(response.data.message);
-          if (apiKey.trim() !== '') {
-            setShowPopup(false);
-          }
       })
       .catch(error => {
         console.error(error);
       });
+    axios.post('/init_conv', { language: language })
+      .then(response => {
+          console.log(response.data.message);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    if (apiKey.trim() !== '') {
+      setShowPopup(false);
+    }
   };
 
   const handleInputChange = (event) => {
@@ -61,14 +68,20 @@ function App() {
         <p key={`cor-p-${i}`}>
           {txt.map((word, j) => (
             formattings[i][j] === " " ? (
+              <>
               <span key={`word-${i}-${j}`}>{word}</span>
+              {' '}
+              </>
             ) : (
+              <>
               <span
                 key={`word-${i}-${j}`}
                 className={formattings[i][j] === "+" ? "correction" : "error"}
               >
                 {word}
               </span>
+              {' '}
+              </>
             )
           ))}
         </p>
@@ -82,21 +95,29 @@ function App() {
         {showPopup && (
           <div className="popup-background">
             <div className="popup">
-              <div className="popup-content">
+              <div className="config-input">
+                <label for="api-key">OpenAI api key:</label>
                 <input
+                  id="api-key"
                   type="text"
                   value={apiKey}
                   onChange={handleApiKeyChange}
-                  placeholder="Enter OpenAI key"
+                  placeholder="xx-xxxxxxxxxxxx"
                 />
+              </div>
+              <div className="config-input">
+                <label for="lang">Language:</label>
                 <input
+                  id="lang"
                   type="text"
                   value={language}
                   onChange={handleLangChange}
-                  placeholder="Enter language"
+                  placeholder="Italian, German, English..."
                 />
-                <button onClick={handleConfigSubmit}>submit</button>
               </div>
+              <button className="submit-button" onClick={handleConfigSubmit}>
+                submit
+              </button>
             </div>
           </div>
         )}
