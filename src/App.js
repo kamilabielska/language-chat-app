@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from "axios";
 import './App.css';
 
@@ -14,6 +14,8 @@ function App() {
   const [showPopup, setShowPopup] = useState(true);
   const [apiKey, setApiKey] = useState('');
   const [language, setLanguage] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleApiKeyChange = (event) => {
     setApiKey(event.target.value);
@@ -46,9 +48,17 @@ function App() {
   const handleInputChange = (event) => {
 	  setInputText(event.target.value);
   };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSave();
+    }
+  };
   
   const handleSave = () => {
   	setMessages(messages => [...messages, { text: inputText, sender: "user" }]);
+    setIsLoading(true);
   	axios.post('/save_data', { message: inputText })
   	  .then(response => {
           console.log(response.data.message);
@@ -59,8 +69,18 @@ function App() {
       })
   	  .catch(error => {
   	    console.error(error);
+      })
+      .finally(() => {
+          setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
 
   function renderFormattedFeedback(txt, formattings, i) {
     return (
@@ -133,6 +153,13 @@ function App() {
                 <p>{message.text}</p>
               </div>
             ))}
+            {isLoading && (
+               <div className="loading-animation">
+                  <div className="dot dot1"></div>
+                  <div className="dot dot2"></div>
+                  <div className="dot dot3"></div>
+              </div>
+            )}
     		  </div>
     		  <div className="send-message-box">
                 <textarea
@@ -142,6 +169,7 @@ function App() {
                   wrap="soft"
                   value={inputText}
                   onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
                 />
                 <button className="send-button" onClick={handleSave}>
                   send
