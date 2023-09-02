@@ -27,23 +27,21 @@ def get_response(user_message):
     if '\n---\n' in chatbot_response['content']:
         correction, chatbot_message = chatbot_response['content'].split('\n---\n')
     else:
-        correction = user_message
+        correction = None
         chatbot_message = chatbot_response['content']
 
     return correction, chatbot_message
 
 
 def correct_user_message(user_txt, correct_txt):
-    difference = Differ().compare(
-        user_txt.split(),
-        correct_txt.split()
-    )
+    difference = Differ().compare(user_txt.split(), correct_txt.split())
+    format_type = {' ': 'normal', '-': 'error', '+': 'correction'}
 
     text, formatting = [], []
     for word in difference:
         if word[0] != '?':
             text.append(word[2:])
-            formatting.append(word[0])
+            formatting.append(format_type[word[0]])
 
     start = 0
     text_concat, formatting_concat = [], []

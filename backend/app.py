@@ -25,7 +25,10 @@ def init_conversation():
 def save_and_respond():
     data = request.json
     correction, chatbot_message = get_response(data['message'])
-    correction, formatting = correct_user_message(data['message'], correction)
+    if correction is None:
+        correction, formatting = ['Error: no correction provided'], ['no-feedback']
+    else:
+        correction, formatting = correct_user_message(data['message'], correction)
 
     return {
         'message': chatbot_message,

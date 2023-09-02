@@ -80,25 +80,15 @@ function App() {
 
   function renderFormattedFeedback(txt, formattings, i) {
     return (
-      <div className="feedback" key={`cor-div-${i}`}>
+      <div className="feedback-block" key={`cor-div-${i}`}>
         <p key={`cor-p-${i}`}>
-          {txt.map((word, j) => (
-            formattings[i][j] === " " ? (
-              <>
-              <span key={`word-${i}-${j}`}>{word}</span>
-              {' '}
-              </>
-            ) : (
-              <>
-              <span
-                key={`word-${i}-${j}`}
-                className={formattings[i][j] === "+" ? "correction" : "error"}
-              >
+          {txt.map((word, j) =>  (
+            <>
+              <span key={`word-${i}-${j}`} className={formattings[i][j]}>
                 {word}
               </span>
               {' '}
-              </>
-            )
+            </>
           ))}
         </p>
       </div>

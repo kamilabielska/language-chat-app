@@ -147,7 +147,7 @@
   row-gap: 20px;
 }
 
-.feedback {
+.feedback-block {
   width: 100%;
   background-color: #EFEFEF;
   border-radius: 7px;
@@ -167,6 +167,13 @@
   background-color: #ff6666;
   text-decoration: line-through;
   padding: 0px 7px;
+  border-radius: 7px;
+}
+
+.no-feedback {
+  color: #660000;
+  background-color: #ff6666;
+  padding: 10px 20px;
   border-radius: 7px;
 }
 
