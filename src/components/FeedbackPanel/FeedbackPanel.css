@@ -1,0 +1,38 @@
+.feedback-panel {
+  width: 30%;
+  margin-bottom: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  row-gap: 20px;
+}
+
+.feedback-block {
+  width: 90%;
+  background-color: #EFEFEF;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.correction {
+  color: #145214;
+  background-color: #99ff66;
+  padding: 0px 7px;
+  border-radius: 7px;
+}
+
+.error {
+  color: #660000;
+  background-color: #ff6666;
+  text-decoration: line-through;
+  padding: 0px 7px;
+  border-radius: 7px;
+}
+
+.no-feedback {
+  color: #660000;
+  background-color: #ff6666;
+  padding: 10px 20px;
+  border-radius: 7px;
+}
