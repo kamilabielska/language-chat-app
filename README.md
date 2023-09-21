@@ -18,3 +18,6 @@ to start the Flask backend. After that, run
 npm start
 ```
 to start React frontend.
+
+# demo
+![language chat app demo](https://github.com/kamilabielska/language_chat_app/blob/master/lang_chat_app_demo.gif?raw=true)
