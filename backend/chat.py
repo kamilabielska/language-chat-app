@@ -1,6 +1,7 @@
 import json
-import openai
+import logging
 
+from openai import OpenAI
 from difflib import Differ
 
 
@@ -32,15 +33,19 @@ def get_response(user_message):
         config = json.load(conf)
         chat_history = json.load(conv)
 
-    openai.api_key = config['api_key']
+    client = OpenAI(api_key=config['api_key'])
 
     chat_history.append({'role': 'user', 'content': user_message})
-    response = openai.ChatCompletion.create(
-        model='gpt-3.5-turbo-0613',
+    logging.debug(f'chat_history: {chat_history}')
+    response = client.chat.completions.create(
+        model='gpt-3.5-turbo',
         temperature=0.7,
         messages=list(chat_history)
     )
-    chatbot_response = dict(response['choices'][0]['message'])
+    logging.debug(f'open ai resonse: {response}')
+
+    chatbot_response = dict(response.choices[0].message)
+    chatbot_response = {k: v for k, v in chatbot_response.items() if k in ['role', 'content']}
     chat_history.append(chatbot_response)
 
     with open('chat_history.json', 'w', encoding='utf-8') as conv:

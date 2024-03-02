@@ -1,5 +1,6 @@
 import json
 import shutil
+import random
 
 from flask import Flask, request
 from chat import get_response, correct_user_message
@@ -44,7 +45,32 @@ def init_conversation():
         A dictionary containing a success message indicating that the conversation
         has been initialized.
     """
-    shutil.copyfile('chat_init.json', 'chat_history.json')
+    names = [
+        "James", "Ethan", "Liam", "Benjamin", "Noah", "Alexander", "Mason", "Caleb",
+        "Emma", "Olivia", "Ava", "Sophia", "Isabella", "Mia", "Emily", "Abigail",
+        "Taylor", "Jordan", "Alex", "Casey", "Jamie", "Morgan", "Cameron", "Riley"
+    ]
+    adjectives = [
+        "kind", "empathetic", "honest", "optimistic", "humble", "diligent", "cheery",
+        "enthusiastic", "sincere", "open-minded", "thoughtful", "reserved", "practical",
+        "cautious", "independent", "skeptical", "detached", "pragmatic", "observant",
+        "rational", "analytical", "nonchalant", "quirky", "chill", "tech-savvy", "trendy",
+        "ambitious", "spirited", "witty", "playful", "engaging", "expressive", "articulate",
+        "shy", "bold", "self-assured"
+    ]
+    with open('chat_init.json', 'r', encoding='utf-8') as init:
+        chat_init = json.load(init)
+        
+    personality = random.choices(adjectives, k=2)
+    chat_init[0]['content'] = chat_init[0]['content'].format(
+        name=random.choice(names),
+        adj1=personality[0],
+        adj2=personality[1]
+    )
+    
+    with open('chat_history.json', 'w', encoding='utf-8') as conv:
+        json.dump(chat_init, conv, ensure_ascii=False, indent=4)
+    # shutil.copyfile('chat_init.json', 'chat_history.json')
     return {'message': 'conversation initialized'}
 
 
