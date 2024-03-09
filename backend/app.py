@@ -1,3 +1,4 @@
+import os
 import json
 import shutil
 import random
@@ -7,6 +8,19 @@ from chat import get_response, correct_user_message
 
 
 api = Flask(__name__)
+
+CONFIG_PATH = 'config.json'
+
+
+@api.route('/get_config', methods=['GET'])
+def get_config():
+    if os.path.exists(CONFIG_PATH):
+        with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            api_key = data.get('api_key', '')
+    else:
+        api_key = ''
+    return {'api_key': api_key}
 
 
 @api.route('/set_config', methods=['POST'])
@@ -23,7 +37,7 @@ def save_config():
         A dictionary containing a success message indicating that the configuration data
         has been saved.
     """
-    with open('config.json', 'w', encoding='utf-8') as f:
+    with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
         json.dump(request.json, f, ensure_ascii=False, indent=4)
     return {'message': 'config saved'}
 
@@ -56,7 +70,7 @@ def init_conversation():
         "cautious", "independent", "skeptical", "detached", "pragmatic", "observant",
         "rational", "analytical", "nonchalant", "quirky", "chill", "tech-savvy", "trendy",
         "ambitious", "spirited", "witty", "playful", "engaging", "expressive", "articulate",
-        "shy", "bold", "self-assured"
+        "shy", "bold", "self-assured", "sad", "bored", "annoying", "terse"
     ]
     with open('chat_init.json', 'r', encoding='utf-8') as init:
         chat_init = json.load(init)
@@ -70,7 +84,7 @@ def init_conversation():
     
     with open('chat_history.json', 'w', encoding='utf-8') as conv:
         json.dump(chat_init, conv, ensure_ascii=False, indent=4)
-    # shutil.copyfile('chat_init.json', 'chat_history.json')
+        
     return {'message': 'conversation initialized'}
 
 
@@ -98,6 +112,8 @@ def save_and_respond():
     correction, chatbot_message = get_response(data['message'])
     if correction is None:
         correction, formatting = ['Error: no correction provided'], ['no-feedback']
+    elif correction == "" or correction == data['message']:
+        correction, formatting = [''], []
     else:
         correction, formatting = correct_user_message(data['message'], correction)
 

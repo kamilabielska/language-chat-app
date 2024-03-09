@@ -62,8 +62,10 @@ function App() {
   	  .then(response => {
         console.log(response.data.message);
         setMessages(messages => [...messages, { text: response.data.message, sender: 'chatbot' }]);
-        setCorrections(corrections => [...corrections, response.data.correction]);
-        setFormattings(formattings => [...formattings, response.data.format]);
+        if (response.data.correction[0]) {
+          setCorrections(corrections => [...corrections, response.data.correction]);
+          setFormattings(formattings => [...formattings, response.data.format]);
+        };
       })
   	  .catch(error => {
   	    console.error(error);
@@ -82,6 +84,24 @@ function App() {
 
   useEffect(() => {
     document.title = 'language chat app';
+    axios.get('/get_config')
+      .then(response => {
+        if (response.data.api_key) {
+          setApiKey(response.data.api_key);
+          setShowPopup(false);
+
+          axios.post('/init_conv')
+          .then(response => {
+            console.log(response.data.message);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        };
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }, []);
 
   return (

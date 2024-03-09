@@ -40,7 +40,8 @@ def get_response(user_message):
     response = client.chat.completions.create(
         model='gpt-3.5-turbo',
         temperature=0.7,
-        messages=list(chat_history)
+        messages=list(chat_history),
+        response_format={"type": "json_object"}
     )
     logging.debug(f'open ai resonse: {response}')
 
@@ -51,9 +52,12 @@ def get_response(user_message):
     with open('chat_history.json', 'w', encoding='utf-8') as conv:
         json.dump(chat_history, conv, ensure_ascii=False, indent=4)
 
-    if '\n---\n' in chatbot_response['content']:
-        correction, chatbot_message = chatbot_response['content'].split('\n---\n', 1)
-    else:
+    try:
+        json_response = json.loads(chatbot_response['content'])
+        correction = json_response['correction']
+        chatbot_message = json_response['response']
+    except Exception as e:
+        print(e)
         correction = None
         chatbot_message = chatbot_response['content']
 
